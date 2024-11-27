@@ -4,6 +4,7 @@ Detailed Breakdown
 1.	Imports and Setup:
 o	Various modules are imported to handle tasks such as logging, GUI, system tray icon creation, mouse/keyboard tracking, AWS S3 interaction, and battery monitoring:
 
+
 	logging: For logging activities to a file.
 	pyautogui: For taking screenshots.
 	boto3: For interacting with AWS S3.
@@ -12,6 +13,7 @@ o	Various modules are imported to handle tasks such as logging, GUI, system tray
 	PIL (Python Imaging Library): For image manipulation (compressing screenshots).
 	psutil: For battery status monitoring.
 	tkinter: For GUI (e.g., configuration window).
+
 
 2.	Global Variables:
 o	is_active: A flag to track whether the user is active (e.g., moving the mouse or pressing keys).
@@ -22,9 +24,11 @@ o	Thresholds for detecting "script-like" behavior (unusual speed, straight-line 
 o	last_mouse_pos and last_mouse_time: To calculate the speed of mouse movement.
 o	last_keypress_time: To detect rapid key presses.
 
+
 3.	System Tray Icon Creation:
 o	The function create_icon_image creates a simple blue square icon using the PIL library for the system tray.
 o	The function on_quit handles the quit operation for the system tray menu.
+
 
 4.	Activity Logging:
 o	The log_activity function logs user actions (mouse movements, clicks, key presses) with a timestamp to a log file (activity_log.txt) and uploads the log to an AWS S3 bucket.
@@ -33,18 +37,22 @@ o	Activity types include:
 	Key Pressed
 o	Additionally, the script flags suspicious activities as "Scripted Activity Detected" based on threshold conditions.
 
+
 5.	Mouse Activity Tracking:
 o	The on_move, on_click, and on_scroll functions are triggered by mouse events: 
 	on_move: Calculates mouse speed and checks if the movement is too fast or too straight (indicating potential scripted behavior).
 	on_click and on_scroll: Log mouse clicks and scroll events.
 
-6.	Keyboard Activity Tracking:
+
+7.	Keyboard Activity Tracking:
 o	The on_press function tracks key presses and logs them. It also checks for rapid key presses by comparing the time between consecutive key presses.
 
-7.	System Tray and Menu:
+
+9.	System Tray and Menu:
 o	The application creates a system tray icon with an option to quit the application. This is handled using the pystray library.
 
-8.	ActivityTracker Class:
+
+11.	ActivityTracker Class:
 o	This class handles screenshot capture, compression, and upload to AWS S3. It has the following responsibilities: 
 	capture_and_compress_screenshot: Takes a screenshot, compresses it, and uploads it to S3.
 	compress_image: Compresses the screenshot to a smaller size for efficient upload.
@@ -54,31 +62,38 @@ o	This class handles screenshot capture, compression, and upload to AWS S3. It h
 	capture_screenshots_periodically: Periodically takes screenshots at the specified interval (screenshot_interval).
 	check_battery_and_manage_tracking: Monitors the battery level and pauses or resumes activity tracking based on the battery percentage (pauses below 20%, resumes above 40%).
 
-9.	Screenshot Capture and Upload:
+
+13.	Screenshot Capture and Upload:
 o	Screenshots are captured using pyautogui.screenshot(), then compressed and saved in memory using io.BytesIO (to avoid file I/O).
 o	User can also enable and disable screenshot capture.
 o	Screenshots are uploaded directly to AWS S3 using the upload_file_to_s3 method, where they are stored under the screenshots/ folder with a timestamped name.
 
-10.	Battery Monitoring:
+
+15.	Battery Monitoring:
 o	Using psutil.sensors_battery(), the script monitors the battery percentage and automatically pauses or resumes activity tracking based on the battery level.
 o	If the battery is below 20%, tracking is paused; if it's above 40%, tracking resumes.
 
-11.	Running the Application:
+
+17.	Running the Application:
 o	The start_application function initializes the ActivityTracker object and starts several background threads to handle: 
 	Activity tracking (mouse and keyboard events).
 	Periodic screenshot capture.
 	Battery monitoring.
 o	The application also starts the system tray icon to allow the user to interact with the program and quit if needed.
 
-12.	Multithreading:
+
+19.	Multithreading:
 o	Threads are used to run background tasks (e.g., screenshot capture, battery monitoring) in parallel to the main application, ensuring the program remains responsive while performing these operations.
 
 
-13.	User Interface (Tkinter GUI):
+20.	User Interface (Tkinter GUI):
 o	The script also integrates a Tkinter window (referred to as ConfigWindow in the code), although the class for it (ConfigWindow) isn't fully defined in the provided code. This window would presumably allow the user to configure settings (like AWS S3 bucket name or screenshot intervals).
 
-14.	Error Handling:
+
+21.	Error Handling:
 o	The script includes error handling for various AWS S3 upload issues, such as missing credentials, network issues, or permission errors. It also handles network errors when uploading logs or screenshots, queuing the uploads if the device is offline.
+
+
 
 
 Code Flow:
@@ -93,6 +108,9 @@ At the end of file I used threading for parallely execution of the function and 
 7.	Updating the code for Low Battery detection: If the system has low battery then it will shut down all the activities and it will check at regular interval that if  battery is charged then restart the agent.
 8.	Suspicious Activity Enhancement: The agent will now define the suspicious activity and flag it in the log file also a new feature is added that when the screenshot is uploaded to the cloud then it will delete from the system memory.
 9.	Activity_log: At last I have added a sample Activity log of my system.
+
+
+
 
 Key Functionalities Summary:
 1.	Monitoring User Activity: The script tracks mouse and keyboard events, detecting unusual patterns (e.g., rapid movements or scripted behaviors).
