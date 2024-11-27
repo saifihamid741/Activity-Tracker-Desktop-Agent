@@ -1,10 +1,11 @@
 Activity Tracker
 Here is an detail description about Activity Tracker that monitors user interactions (mouse and keyboard activities), takes periodic screenshots, uploads activity logs and screenshots to AWS S3, and handles error like battery monitoring to pause tracking when the battery is low. It also uses a system tray icon for user interaction.
+
+
 Detailed Breakdown
+
 1.	Imports and Setup:
 o	Various modules are imported to handle tasks such as logging, GUI, system tray icon creation, mouse/keyboard tracking, AWS S3 interaction, and battery monitoring:
-
-
 	logging: For logging activities to a file.
 	pyautogui: For taking screenshots.
 	boto3: For interacting with AWS S3.
